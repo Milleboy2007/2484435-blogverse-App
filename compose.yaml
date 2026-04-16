@@ -9,7 +9,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     networks:
-      - ecommerce-network
+      - blogverse-network
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:
@@ -19,9 +19,9 @@ services:
       retries: 5
 
   backend:
-    image: cmvghazi/ecommerce-backend:${BACKEND_VERSION:-latest}
+    image: milleboy2007/tp2-2484435-blogverse-backend:${BACKEND_VERSION:-latest}
     build:
-      context: ./ecommerce-backend
+      context: ./2484435-blogverse-backend
       dockerfile: Dockerfile
     restart: unless-stopped
     environment:
@@ -34,7 +34,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
     networks:
-      - ecommerce-network
+      - blogverse-network
     ports:
       - "${BACKEND_PORT:-3000}:3000"
     depends_on:
@@ -42,15 +42,15 @@ services:
         condition: service_healthy
 
   frontend:
-    image: cmvghazi/ecommerce-frontend:${FRONTEND_VERSION:-latest}
+    image: milleboy2007/tp2-2484435-blogverse-frontend:${FRONTEND_VERSION:-latest}
     build:
-      context: ./ecommerce-frontend
+      context: ./2484435-blogverse-frontend
       dockerfile: Dockerfile
       args:
         VITE_API_URL: ${VITE_API_URL}
     restart: unless-stopped
     networks:
-      - ecommerce-network
+      - blogverse-network
     ports:
       - "${FRONTEND_PORT:-8080}:80"
     depends_on:
@@ -60,5 +60,5 @@ volumes:
   db_data:
 
 networks:
-  ecommerce-network:
+  blogverse-network:
     driver: bridge
